@@ -1,0 +1,100 @@
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2012 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<%+header%>
+<script>
+	var http = new XMLHttpRequest();
+	var url = 'http://192.168.43.73:8000/rest-auth/login/';
+	var params = 'username=nyat0&password=nyat0000';
+	http.open('POST', url, true);
+
+	//Send the proper header information along with the request
+	http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	http.onreadystatechange = function() {//Call a function when the state changes.
+		if(http.readyState == 4 && http.status == 200) {
+			key=JSON.parse(http.responseText).key
+			console.log(key);
+			var xmlhttp = new XMLHttpRequest();
+			var url = "http://192.168.43.73:8000/api_rest/services/";
+			var customXMLHttpRequest = (function (jwtoken) {
+
+			function getXMLHttpRequest(method, url, async){
+				console.log(jwtoken)
+				var xmlHttpRequest = new XMLHttpRequest();
+				xmlHttpRequest.open(method, url, async);
+				xmlHttpRequest.setRequestHeader('Authorization', 'Token ' + jwtoken);
+				return xmlHttpRequest;
+			}
+
+			return getXMLHttpRequest;
+			})(key)
+
+
+			var xmlhttpRequest = customXMLHttpRequest('GET', url, true)
+			xmlhttpRequest.send()
+			xmlhttpRequest.onload  =  function() {
+				if ( xmlhttpRequest.status == 200) {
+					var services = JSON.parse(xmlhttpRequest.responseText);
+					AddLines(services);
+					}
+				};
+			/*xmlhttp.onreadystatechange = function() {
+
+			if (this.readyState == 4 && this.status == 200) {
+				var services = JSON.parse(this.responseText);
+				AddLines(services);
+				}
+			};
+			xmlhttp.open("GET", url, true);
+			xmlhttp.setRequestHeader('Authorization', 'Token '+http.responseText.key)
+			xmlhttp.send();*/
+	
+		}
+	}
+	http.send(params);
+
+	function AddLines(arr) {
+	  var out = "";
+	  var i;
+	  for(i = 0; i < arr.length; i++) {
+		if (arr[i].etat_suppression){
+			abonnement="Non abonné";
+			option="Abonner";
+		}else{
+			abonnement="abonné";
+			option="Désabonner";
+		}
+		out+='<div class="tr"><div class="td">'+
+		arr[i].nom_service+'</div><div class="td">'+
+		arr[i].description+'</div><div class="td" id="desc'+
+		i+'">'+abonnement+
+		'</div><div class="td"><input type="button" style="text-align: center;width:125px" id="btn'+
+		i+'"  class="cbi-button cbi-button-negative" value='+
+		option+' onclick=change_abonnement(event)></input><input type="button" class="cbi-button cbi-button-action important" value="détails"></input></div></div>';
+	  }
+	  document.getElementById("table_services").innerHTML += out;
+	}
+	function change_abonnement(e){
+		if(e.innerHTML=="Désabonner"){
+			e.innerHTML="Abonner"
+		}else{
+			e.innerHTML="Désabonner"
+		}
+	}
+	</script>
+	<form class="cbi-map">
+		<h1 class="cbi-section">Services</h1>
+		<div class="table" id="table_services">
+			<div class="tr table-titles">
+			<div class="th">Nom du service</div>
+			<div class="th">Description</div>
+			<div class="th">Statut</div>
+			<div class="th">Action</div>
+			</div>
+		</div>
+	</form>
+<%+footer%>
