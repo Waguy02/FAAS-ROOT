@@ -1,0 +1,128 @@
+<%- 
+
+function getServices()
+        local tpl  = require "luci.template"
+        x=tpl.render("header")
+        return tpl
+   
+
+end 
+-%>
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+<%+header%>                                                                    
+
+
+
+
+
+
+
+
+
+<h1><%:Liste des services Test%></h1> 
+<hr>
+
+<div class="table" >
+	<div class="tr table-titles">
+		<div class="th"><%:Nom%></div>
+		<div class="th"><%:Description%></div>
+		<div class="th"><%:Statut%></div>
+		<div class="th"><%:Action%></div>
+		
+    </div>
+    
+
+    <div class="tr">
+
+        <div class="td"> OpenVpn</div>
+
+        <div class="td">Utiliser les fonctionnalités du protocole OPENVPN</div>
+
+        <div class="td">Souscription active</div>
+
+        <div class="td"><button class="cbi-button ">Accéder au service</button> <button class="cbi-button ">Se désabonner</button></div>
+
+    </div >
+
+
+
+
+
+
+
+
+
+
+
+    <div class="tr">
+
+        <div class="td"> Géolocalisation</div>
+
+        <div class="td"> Accéder à la position géographique de ce router</div>
+
+        <div class="td">Aucune souscription</div>
+
+        <div class="td"><button class="cbi-button cbi-button-add"> S'enregistrer</button></div>
+
+    </div >
+
+
+
+
+
+
+
+
+</div>
+
+<script type="text/javascript">//<![CDATA[
+	cbi_bind(document.getElementById('_newfwd.extport'), 'blur',
+		function() {
+			var n = document.getElementById('_newfwd.name');
+			var p = document.getElementById('_newfwd.proto');
+			var i = document.getElementById('_newfwd.intport');
+			var hints = {
+			/*  port    name     0=both, 1=tcp, 2=udp, 3=other */
+				21:   [ 'FTP',   1 ],
+				22:   [ 'SSH',   1 ],
+				53:   [ 'DNS',   0 ],
+				80:   [ 'HTTP',  1 ],
+				443:  [ 'HTTPS', 1 ],
+				3389: [ 'RDP',   1 ],
+				5900: [ 'VNC',   1 ],
+			};
+
+			if (!this.className.match(/invalid/))
+			{
+				if (!i.value) i.value = this.value;
+
+				var hint = hints[this.value || 0] || hints[i.value || 0];
+				if (hint)
+				{
+					p.selectedIndex = hint[1];
+
+					if (!n.value)
+						n.value = hint[0];
+				}
+				else if (!n.value)
+				{
+					n.value = 'Forward' + this.value;
+				}
+			}
+		});
+//]]></script>
+
+
+<%+footer%>

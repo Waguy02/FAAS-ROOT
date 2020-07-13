@@ -1,0 +1,61 @@
+<%+header%>                                                                    
+
+<%- 
+
+	local tpl  = require "luci.template"
+	local http = require "luci.http"
+    http.prepare_content("application/json")
+
+    
+
+
+
+-%> 
+
+
+<div  style="width: 1366px">
+    <H1><% print(httpf) %> </H1>
+<iframe src="https://google.cm" title="W3Schools Free Online Web Tutorials"></iframe>
+
+</div >
+
+<h1><%:Hello World%></h1> 
+<hr>
+
+
+<div class="bg-primary">
+    ICI LA PREMIERE SECTION 
+</div >
+
+<table>
+    <th>
+        <td>
+            SERVICE
+        </td>
+        <td>
+            DESCRIPTION
+        </td>
+        <td>
+            STATUT
+        </td>
+        <td>
+            ACTION
+        </td>
+    </th>
+
+    <tr>
+        <td>
+            SERVICE 1
+        </td>
+        <td>
+            DESCRIPTION 1
+        </td>
+        <td>
+            STATUT 1
+        </td>
+        <td>
+            ACTION 1
+        </td>
+    </tr>
+</table>
+<%+footer%>

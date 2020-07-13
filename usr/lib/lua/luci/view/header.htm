@@ -1,0 +1,35 @@
+
+
+
+<%#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+-%>
+
+<!-- Latest compiled and minified CSS -->
+
+<script type="text/javascript" src="bootstrap/js/jquery.min.js"> 
+</script>
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+
+
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.css">
+
+
+<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"> 
+ </script>
+
+
+
+
+
+<%
+	if not luci.dispatcher.context.template_header_sent then
+		include("themes/" .. theme .. "/header")
+		luci.dispatcher.context.template_header_sent = true
+	end
+%>
