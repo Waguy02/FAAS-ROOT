@@ -1,0 +1,30 @@
+{%load static%}{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MaskorNo</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="{% static 'image_det/css/bootstrap.min.css'%}" rel="stylesheet">
+        <link href="{% static 'image_det/css/mdb.min.css'%}" rel="stylesheet">
+        <link href="{% static 'image_det/css/style.min.css'%}" rel="stylesheet">
+        <link href="{% static 'image_det/css/bootstrap.css'%}" rel="stylesheet" type="text/css" media="all" />
+        <link href="{% static 'image_det/css/style.css'%}" rel="stylesheet" type="text/css" media="all" />
+        <link href="{% static 'image_det/css/util.css'%}" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %} {{ form|crispy }}
+                <button class="btn btn-default" type="submit">Valider</button>   
+            </form>
+        </div>
+
+        <script type="text/javascript" src="{%static 'image_det/js/jquery-3.3.1.min.js'%}"></script>
+  
+        <script type="text/javascript" src="{%static 'image_det/js/popper.min.js'%}"></script>
+      
+        <script type="text/javascript" src="{%static 'image_det/js/bootstrap.min.js'%}"></script>
+       
+        <script type="text/javascript" src="{%static 'image_det/js/mdb.min.js'%}"></script>
+    </body>
+</html>
