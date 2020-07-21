@@ -24,8 +24,9 @@ def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
+            #title = form.cleaned_data['title'] + " : "
             filename = handle_uploaded_file(request.FILES['file_'])
-            file_url = './media/'+filename    
+            file_url = filename    
             status = get_image_status(file_url)
             return render(request, 'image.html', {'file_url': file_url, 'status':status})
     else:
@@ -35,7 +36,7 @@ def upload_file(request):
 
 def get_image_status(img_url):
     model_load = load_model('./model_tf/masked_and_unmasked.h5')
-    img = image.load_img(img_url, target_size=(150, 150))
+    img = image.load_img('./media/'+img_url, target_size=(150, 150))
     img_tensor = image.img_to_array(img)
     #img_tensor = np.expand_dims(img_tensor, axis=0)
     img_tensor /= 255.

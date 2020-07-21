@@ -32,7 +32,7 @@ class AuthorizationMiddleware:
     def process_view(self, request, view_func, view_args, view_kwargs):
         if request.META['QUERY_STRING'] != '':
             token = request.META['QUERY_STRING'].split('=')[1]
-            status = requests.get('http://127.0.0.1:8000/api_rest/user/?token={}'.format(token)).status_code
+            status = requests.get('https://servicewiafirm.herokuapp.com/api_rest/user/?token={}'.format(token)).status_code
             
             if status == 404: 
                 return HttpResponse(content = "Il se pourrait que vous ne soyez pas un utilisateur enregistré", status = 404)

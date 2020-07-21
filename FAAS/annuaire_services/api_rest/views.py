@@ -42,11 +42,19 @@ class ServiceListAPIView(generics.ListAPIView):
         return qs
 
     def get(self , request , *args , **kwargs):
-        print(request.headers)
         query = self.get_queryset()
         data = self.serializer_class(query , many=True).data
+        souscriptions = SouscriptionServiceUser.objects.filter(user = self.request.user)
+        token = Token.objects.get(user=request.user)
         for item in data:
-            item.pop('route_entree')
+            for souscription in souscriptions:
+                if item['pk'] == souscription.service.pk:
+                    item['id_souscr'] = souscription.pk
+                    break
+            if 'id_souscr' not in item.keys():
+                item['id_souscr'] = -1
+            item['route_entree'] += "?token={}".format(token.key)
+            item.pop('url')
             """new_url = reverse('redirect_view', request = self.request)
             item['route_entree'] = new_url + '?to='+ item['route_entree']"""
         
@@ -68,8 +76,10 @@ class ServiceRUView(generics.RetrieveUpdateAPIView):
     def get(self, request , *args , **kwargs):
         query = self.get_object()
         data = self.serializer_class(query , many=False).data   
-        new_url = reverse('redirect_view', request = self.request)
-        data['route_entree'] = new_url + '?to='+ data['route_entree']
+        token = Token.objects.get(user=request.user)
+        data['route_entree'] += "?token={}".format(token.key)
+        #new_url = reverse('redirect_view', request = self.request)
+        #data['route_entree'] = new_url + '?to='+ data['route_entree']
         return response.Response(data , status=status.HTTP_200_OK)
 
     def get_serializer_context(self, *args, **kwargs):
@@ -80,8 +90,9 @@ class SouscriptionView(generics.CreateAPIView):
     serializer_class = SouscriptionCreateSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user = self.request.user)
-        
+        service = Service.objects.get(id=self.request.data['service'])
+        serializer.save(user = self.request.user, service = service)
+
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 

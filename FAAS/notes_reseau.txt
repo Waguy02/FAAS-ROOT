@@ -1,0 +1,2 @@
+Similitudes installations ajouts et suppression des services (packages/services)
+donner les equivalences packages et services openwrt init et FAAS

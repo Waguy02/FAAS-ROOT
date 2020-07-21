@@ -10,7 +10,7 @@ import datetime
 import base64
 import requests
 from django.http import HttpResponse, HttpResponseRedirect
-
+import re
 
 class AuthorizationMiddleware:
     def __init__(self, get_response):
@@ -30,10 +30,12 @@ class AuthorizationMiddleware:
         return response
 
     def process_view(self, request, view_func, view_args, view_kwargs):
+        #FREE_URLS =  [settings.STATIC_URL, settings.MEDIA_URL]
+        if settings.MEDIA_URL in request.path_info:
+            return None
         if request.META['QUERY_STRING'] != '':
             token = request.META['QUERY_STRING'].split('=')[1]
-            status = requests.get('http://192.168.43.73:8000/api_rest/user/?token={}'.format(token)).status_code
-        
+            status = requests.get('https://servicewiafirm.herokuapp.com/api_rest/user/?token={}'.format(token)).status_code
             if status == 404: 
                 return HttpResponse(content = "Il se pourrait que vous ne soyez pas un utilisateur enregistré", status = 404)
             elif status == 401:
